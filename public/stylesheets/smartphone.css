@@ -1,8 +1,9 @@
-body                { background: #333; }
+body                { background: #333;}
 
 #page-wrap:after    { content: "Smartphone Layout";}
 
 h2 span, section h3 {display: none;}
-body                { font-size: xx-large;}
+/*body                { font-size: xx-large;}*/
 footer, input       { font-size: large;}
 footer span         {margin: 0px 50px 0px 0px;}
+section > div       { padding: 0px;}
