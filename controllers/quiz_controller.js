@@ -15,10 +15,30 @@ exports.load = function(req, res, next, quizId) {
 
 // GET /quizes
 exports.index = function(req, res) {
-	models.Quiz.findAll().then(function(quizes) {
-		res.render('quizes/index.ejs', {quizes: quizes});
+	var buscar = req.query.search || '';
+
+	// No nos pasan nigun filtro
+	if (buscar === '') {
+		models.Quiz.findAll().then(
+			function(quizes) {
+				res.render('quizes/index', {quizes: quizes, errors: []});
+			}
+		);
+
+	} else {
+		// Reemplazamos los espacions por %
+		// De esta forma, si busca "uno dos" ("%uno%dos%"),
+		// mostrará todas las preguntas que tengan "uno" seguido de "dos",
+		// independientemente de lo que haya entre "uno" y "dos".
+		buscar = buscar.replace(/ /g, '%');
+
+		models.Quiz.findAll({where: ["pregunta like ?", '%' + buscar + '%'], order: 'pregunta'}).then(
+			function(quizes) {
+				res.render('quizes/index', {quizes: quizes, errors: []});
+
+			}
+		);		
 	}
-	).catch(function(error) { next(error);})
 };
 
 // GET /quizes/:id
